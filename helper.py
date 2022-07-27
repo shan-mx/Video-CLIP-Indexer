@@ -9,14 +9,14 @@ import numpy as np
 client = Client(server='grpc://0.0.0.0:51000')
 
 
-def get_frame_types(file: str) -> zip:
+def get_frame_types(file: str):
     command = 'ffprobe -v error -show_entries frame=pict_type -of default=noprint_wrappers=1'.split()
     out = subprocess.check_output(command + [file]).decode()
     frame_types = out.replace('pict_type=', '').split()
     return zip(range(len(frame_types)), frame_types)
 
 
-def get_keyframes_b64(file: str, save_image: bool = False) -> List[Tuple[int, str]]:
+def get_keyframes_b64(file: str, save_image: bool = False):
     frame_types = get_frame_types(file)
     i_frames = [x[0] for x in frame_types if x[1] == 'I']  # select the key frames
     keyframes_b64 = []
@@ -37,7 +37,7 @@ def get_keyframes_b64(file: str, save_image: bool = False) -> List[Tuple[int, st
     return keyframes_b64
 
 
-def search_frame(file_name: str, prompt: str, topn: int) -> List[List[Dict, str, float]]:
+def search_frame(file_name: str, prompt: str, topn: int):
     keyframe_data = get_keyframes_b64(file_name)
     da = DocumentArray(
         [Document(tags={'index': str(tup[0])}, uri='data:image/jpg;base64,' + tup[1]) for tup in keyframe_data])

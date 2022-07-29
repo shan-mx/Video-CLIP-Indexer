@@ -4,3 +4,4 @@ ImageHash==4.2.1
 numpy==1.22.4
 Pillow==9.2.0
 streamlit==1.11.1
+sk-video==1.1.10

@@ -1,5 +1,5 @@
 import streamlit as st
-from helper import search_frame, cut_results, read_video, write_video
+from helper import search_frame, read_video, write_video
 import os
 st.set_page_config(page_title='CLIP Video Indexer', page_icon='🔍')
 st.title('CLIP Video Indexer')

@@ -2,12 +2,10 @@ from clip_client import Client
 from docarray import Document, DocumentArray
 import imagehash
 from PIL import Image
-from numpy import ndarray
-
-client = Client(server='grpc://0.0.0.0:51000')
+import numpy as np
 
 
-def get_keyframes_data(video_data: 'ndarray', cut_sim: float):
+def get_keyframes_data(video_data: 'np.ndarray', cut_sim: float):
     last_hash = imagehash.phash(Image.fromarray(video_data[0]))
     key_frames = [0]
     frame_num = 0
@@ -24,7 +22,8 @@ def get_keyframes_data(video_data: 'ndarray', cut_sim: float):
     return keyframes_data
 
 
-def search_frame(keyframe_data: list, prompt: str, topn: int):
+def search_frame(keyframe_data: list, prompt: str, topn: int, server_url: str):
+    client = Client(server_url)
     da = DocumentArray([Document(tags={'left': str(tup[0][0]), 'right': str(tup[0][1])}, tensor=tup[1]) for tup in keyframe_data])
     d = Document(text=prompt, matches=da)
     r = client.rank([d])

@@ -9,13 +9,14 @@ uploaded_file = st.file_uploader('Choose a file')
 text_prompt = st.text_input('Text Prompt', '')
 topn_value = st.text_input('Top N', '5')
 cut_sim_value = st.text_input('Cut Sim', '0.6')
+cas_url = st.text_input('CLIP-as-service Server', 'grpcs://demo-cas.jina.ai:2096')
 search_button = st.button('Search')
 if search_button:
     if uploaded_file is not None:
         with st.spinner('Processing...'):
             video_data = skvideo.io.vread(uploaded_file.name)
             keyframe_data = get_keyframes_data(video_data, float(cut_sim_value))
-            spams, ndarray, scores = search_frame(keyframe_data, text_prompt, int(topn_value))
+            spams, ndarray, scores = search_frame(keyframe_data, text_prompt, int(topn_value), cas_url)
             os.makedirs('tmp_videos', exist_ok=True)
             for spam in spams:
                 i = spams.index(spam)
